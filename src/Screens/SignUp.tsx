@@ -24,26 +24,26 @@ export function SignUp() {
         <Logo />
       </VStack>
         <Text fontSize={35} fontFamily="title" >Trackin'Box</Text>
-        <Heading color="gray.300" fontSize="lg" mt={1} mb={6}>
+        <Heading color="gray.400" fontSize="lg" mt={1} mb={6}>
           Crie sua conta
         </Heading>
         
       <Input
         placeholder='Nome'
         mb={4}
-        InputLeftElement={<Icon as={<User color={colors.gray[300]}/>} ml={4}/>}
+        InputLeftElement={<Icon as={<User color={colors.gray[400]}/>} ml={4}/>}
         onChangeText={setEmail}
         />
       <Input
         placeholder='E-mail'
         mb={4}
-        InputLeftElement={<Icon as={<Envelope color={colors.gray[300]}/>} ml={4}/>}
+        InputLeftElement={<Icon as={<Envelope color={colors.gray[400]}/>} ml={4}/>}
         onChangeText={setEmail}
         />
       <Input
         placeholder='Senha'
         mb={4}
-        InputLeftElement={<Icon as={<Key color={colors.gray[300]}/>} ml={4}/>}
+        InputLeftElement={<Icon as={<Key color={colors.gray[400]}/>} ml={4}/>}
         type='password'
         onChangeText={setPassword}
         />
