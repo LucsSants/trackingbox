@@ -8,7 +8,7 @@ import Logo from '../assets/logo.svg'
 
 
 import { Button } from '../Components/Button';
-import { getAllStatus, getLastStatus } from '../api/api';
+import { getLastStatus } from '../api/api';
 
 
 export function SignIn() {

@@ -27,30 +27,7 @@ function RemoveBigSpace(str:string) {
   return str
 }
 
-
-export async function getLastStatus() {
-  axios("https://www.linkcorreios.com.br/?id=QC638247124BR")
-    .then(
-      (response) => {
-        const html = response.data
-        const $ = cheerio.load(html)
-        const info : any =[]
-
-        $('.card-header ul li',html).each( function() {
-         info.push(removeColonBetweenNumbers(($(this).text())).split(":"))
-        })
-        let hora = info[1].slice(2,4)
-        info.push(hora)
-      const obj = Object.fromEntries(info)
-      console.log(obj)
-      }
-      
-    ).catch(err=> console.log(err))
-  
-}
-
-
-export async function getAllStatus() {
+export async function getAllStatus(orderCode: string) {
 
   axios("https://www.linkcorreios.com.br/?id=LB568216445HK")
     .then(
@@ -89,21 +66,34 @@ export async function getAllStatus() {
         info.forEach(function(item:any) {
           infos.push(removeColonBetweenNumbers(item.toString()).split(":"))
         })
-        // const json = Object.assign({}, infos)
-
         const obj = arrayDeArraysParaObjetos(infos)
-        
-       
-        
-   
-        
-       
-        console.log("CUCUCUCCUCUCUCUCUCUCUCCUCUCUCUCUCUC")
-      
-        
     }
     
-
-
     ).catch(err=> console.log(err))
+
+    
+}
+
+export async function getLastStatus(orderCode: string) {
+  let cu = {}
+  await axios(`https://www.linkcorreios.com.br/?id=${orderCode}`)
+    .then(
+      async (response) =>  {
+        const html = await response.data
+        const $ = cheerio.load(html)
+        const info : any =[]
+        $('.card-header ul li',html).each( function() {
+          info.push(removeColonBetweenNumbers(($(this).text())).split(":"))
+        })
+        let hora = info[1].slice(2,4)
+        info.push(hora)
+        const obj = Object.fromEntries(info)
+      
+        cu = obj
+      }
+      
+      ).catch(err=> console.log(err))
+
+      return cu
+      
 }
