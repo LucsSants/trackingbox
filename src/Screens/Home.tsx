@@ -1,25 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
 import { Center, HStack, Icon, IconButton,ScrollView, Text, VStack, useTheme, useToast, FlatList} from 'native-base';
 import MiniLogo from '../assets/mini-logo.svg'
-import { Order } from '../Components/Order';
+import { Order, OrderProps } from '../Components/Order';
 import { Button } from '../Components/Button';
 import { PlusCircle, UserCircle} from 'phosphor-react-native';
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
-import { getLastStatus } from '../api/api';
 import { Loading } from '../Components/Loading';
+import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@apollo/client'
+import { GET_ALL_ORDERS } from '../api/querries';
 
 export function Home() {
+  const {loading,error, data,refetch } = useQuery(GET_ALL_ORDERS)
   const {colors} = useTheme()
   const toast = useToast()
-  const [isLoading, setIsLoading] = useState(true)
-  const [orders, setOrders] = useState<any[]>([])
 
-  async function cu() {
-    const pica = await getLastStatus("LB568216445HK")
-   console.log(pica)
+  const navigation = useNavigation()
+
+  async function handleNewOrder() {
+    navigation.navigate('new')
   }
-
 
   function handleLogout() {
     auth()
@@ -31,28 +32,11 @@ export function Home() {
   }
 
   useEffect(() => {
-    setIsLoading(true)
-    const userId = auth().currentUser?.uid
-    const subscriber = firestore()
-    .collection('Order')
-    .where('userID', '==', userId)
-    .onSnapshot( async snapshot => {
-     
-      const data = snapshot.docs.map(doc=> {
-        const {orderCode, orderTitle, userID} = doc.data()
-        return {id: doc.id, orderCode, orderTitle, userID}
-      })
-      setOrders(data)
-      setIsLoading(false)
-      
-    })
-  return subscriber
-   
-  }, [])
-  
- 
+    refetch()
+  },[])
+
     return (
-    <VStack flex={1}> 
+    <VStack flex={1}>
       <VStack w={'full'} alignItems="center" justifyContent="space-between" flexDirection="row" h={120} background='white' px={5} pt={5}>
         <HStack width="36px"/>
         <HStack alignItems="center" justifyContent="center">
@@ -72,10 +56,10 @@ export function Home() {
       </VStack>
 
 
-      { isLoading ? <Loading/> : 
+      { loading ? <Loading/> : 
       <FlatList
-      data={orders}
-      keyExtractor={item => item.id}
+      data={data.firebaseUser.orders}
+      keyExtractor={(item : OrderProps) => item.id}
       renderItem={({item}) => <Order data={item} />}
       px={4} 
        py={6}
@@ -95,7 +79,7 @@ export function Home() {
      
     <HStack h={20} alignItems="center" justifyContent="center" px="4" py="5">
 
-    <Button title='Nova Encomenda' w="full" rounded="full" onPress={cu} leftIcon={<Icon as={<PlusCircle color="white"/>}/>} />
+    <Button title='Nova Encomenda' w="full" rounded="full" onPress={handleNewOrder} leftIcon={<Icon as={<PlusCircle color="white"/>}/>} />
      
     </HStack>
     </VStack>

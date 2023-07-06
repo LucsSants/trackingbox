@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { VStack, Icon, useTheme, Text, Heading, Pressable, useToast  } from 'native-base';
+import {Keyboard} from 'react-native'
+import { VStack, Icon, useTheme, Text, Heading, Pressable, useToast, keyboardDismissHandlerManager } from 'native-base';
 import auth from '@react-native-firebase/auth'
 import {useNavigation} from '@react-navigation/native'
 import { Input } from '../Components/Input';
@@ -8,7 +9,6 @@ import Logo from '../assets/logo.svg'
 
 
 import { Button } from '../Components/Button';
-import { getLastStatus } from '../api/api';
 
 
 export function SignIn() {
@@ -27,6 +27,7 @@ export function SignIn() {
   }
 
   function handleSignIn() {
+    Keyboard.dismiss()
     if (!email || !password) {
       return toast.show({description: 'Preencha E-mail e Senha'})
     }

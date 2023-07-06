@@ -9,7 +9,6 @@ export function SignInRoutes() {
     <Navigator screenOptions={{headerShown:false}}>
       <Screen name="signin" component={SignIn} />
       <Screen name="signup" component={SignUp} />
-      <Screen name="home" component={Home} />
     </Navigator>
   )
 }
