@@ -8,10 +8,14 @@ import { Button } from '../Components/Button';
 import firestore from '@react-native-firebase/firestore'
 import auth from '@react-native-firebase/auth'
 import { useNavigation } from '@react-navigation/native';
+import { CreateOrderTwo } from '../api/querries';
+import { getLastStatus } from '../api/api';
 
-type tagType = {
-  tagName: string;
-  tagColor: string;
+export type tagType = {
+  tagTitle: string;
+  tagColor: {
+    hex: string;
+  };
 }
 
 export function NewOrder() {
@@ -27,6 +31,17 @@ export function NewOrder() {
   const toast = useToast()
   const navigation = useNavigation()
 
+  function removeQuotesAroundKeys(inputString: string): string {
+    try {
+        const modifiedString = inputString.replace(/"([^"]+)":/g, '$1:');
+        return modifiedString;
+    } catch (error) {
+        return "Erro: A string JSON fornecida é inválida.";
+    }
+}
+
+const inputString = '[{"tagName":"aaa","tagColor":{"hex":"#24A6D9"}}]';
+const formattedString = removeQuotesAroundKeys(inputString);
   
   function handleAddTags() {
     Keyboard.dismiss()
@@ -37,10 +52,10 @@ export function NewOrder() {
     if (tags.length >= 5) {
       return toast.show({description: 'Adicione até 5 Tags'})
     } 
-    setTags( current =>[...current, {tagName: tagName, tagColor: color}])
+    setTags( current =>[...current, {tagTitle: tagName, tagColor: {hex: color}}])
   }
 
-  function handleCreateOrder() {
+  async function  handleCreateOrder() {
     if (!orderTitle || !orderCode ) {
       return toast.show({description: 'Preencha os campos!'})
     }
@@ -49,32 +64,13 @@ export function NewOrder() {
     }
     setIsLoading(true)
     const userID = auth().currentUser?.uid
+    const {Data, Hora, Local ,Status} : any = await getLastStatus("LB568216445HKa")
+    const tagsFormated = removeQuotesAroundKeys(JSON.stringify(tags))
+    console.log(tagsFormated)
+    CreateOrderTwo(orderCode, orderTitle, Data, Hora, Status, tagsFormated)
 
-    firestore()
-    .collection('Order')
-    .add({
-      orderCode,
-      orderTitle,
-      userID
-    })
-    .then( async function (docRef) {
-      const orderId = docRef.id
-      await tags.forEach(tag=> {
-        firestore()
-        .collection('Tags')
-        .add({
-          orderId,
-          tagColor: tag.tagColor,
-          tagName: tag.tagName
-        })
-      })
-      toast.show({description: 'Adicionado!'})
-      navigation.goBack()
-    }
-    ).catch((error) =>  {
-      setIsLoading(false)
-      console.log(error)
-    })
+    setIsLoading(false)
+    navigation.navigate('home')
     
   }
   
@@ -84,7 +80,7 @@ export function NewOrder() {
       <Header title='Nova Encomenda' />
       <Input title='Código de rastreamento' placeholder='#1234ACASDDF2C' onChangeText={setOrderCode}/>
       <Input title='Nome' placeholder='Roupa...' onChangeText={setOrderTitle}/>
-      <Input title='Tags' placeholder='Loja...' buttonTitle='Adicionar' value={tagName} buttonColor={color} onChangeText={setTagName} buttonFunc={handleAddTags} maxLength={10}/>
+      <Input title='Tags' placeholder='Loja...' buttonTitle='Adicionar' value={tagName} buttonColor={color} onChangeText={setTagName} buttonFunc={handleAddTags} maxLength={15}/>
       
       <VStack  flexDirection="row" justifyContent="space-between" mt="6">
         
@@ -100,7 +96,7 @@ export function NewOrder() {
         horizontal
         showsHorizontalScrollIndicator={false}
         data={tags}
-        renderItem={({item}) => <OrderTag color={item.tagColor} title={item.tagName}/>}
+        renderItem={({item}) => <OrderTag color={item.tagColor.hex} title={item.tagTitle}/>}
         />
         
         {tags.length > 0 ?

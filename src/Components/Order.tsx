@@ -39,12 +39,12 @@ export function Order({data, ...rest} : Props) {
         <VStack backgroundColor="gray.300" h="55" w="55" rounded="full" alignItems="center" justifyContent="center">
           <CheckCircle weight='fill' size={32} color={colors.green[200]}/>
         </VStack>
-        <Text color="green.700" fontWeight="black" >{formatDate(data.orderLastStatus.statusDate)}</Text>
-        <Text color="gray.500" fontSize="12">{data.orderLastStatus.statusTime}</Text>
+        <Text color="green.700" fontWeight="black" >{formatDate(data.orderLastStatus.statusDate) === "undefined/undefined" ? "??" : formatDate(data.orderLastStatus.statusDate)}</Text>
+        <Text color="gray.500" fontSize="12">{data.orderLastStatus.statusTime === "undefined" ? "??" : data.orderLastStatus.statusTime}</Text>
       </VStack>
       <VStack ml={6} alignItems="flex-start" justifyContent="center">
         <Text fontSize="lg" color="green.700" fontWeight="bold">{data.orderTitle}</Text>
-        <Text fontSize="14" color="gray.400">{data.orderLastStatus.statuses}</Text>
+        <Text fontSize="14" color="gray.400">{data.orderLastStatus.statuses === "undefined" ? "Sem informações" : data.orderLastStatus.statuses}</Text>
         
       
         <VStack w="240" flexDirection="row" alignItems="center" mt="2">
@@ -52,7 +52,7 @@ export function Order({data, ...rest} : Props) {
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false} 
-            zIndex={9999999999999999999999999999999}
+            zIndex={99}
             // backgroundColor="gray.700"
             ml={1}
             >

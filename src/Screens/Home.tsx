@@ -7,15 +7,17 @@ import { PlusCircle, UserCircle} from 'phosphor-react-native';
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
 import { Loading } from '../Components/Loading';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useQuery } from '@apollo/client'
+
 import { GET_ALL_ORDERS } from '../api/querries';
 
 export function Home() {
+  const isFocused = useIsFocused();
+
   const {loading,error, data,refetch } = useQuery(GET_ALL_ORDERS)
   const {colors} = useTheme()
   const toast = useToast()
-
   const navigation = useNavigation()
 
   async function handleNewOrder() {
@@ -23,17 +25,18 @@ export function Home() {
   }
 
   function handleLogout() {
-    auth()
-    .signOut()
-    .catch((error) => {
-      console.log(error)
-      toast.show({description: 'Não foi possível sair'})
-    })
+    refetch()
   }
 
   useEffect(() => {
-    refetch()
-  },[])
+    (async () => {
+      if(isFocused) {
+        refetch()
+      }
+    })();
+  
+    
+  },[isFocused])
 
     return (
     <VStack flex={1}>

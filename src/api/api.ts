@@ -75,25 +75,28 @@ export async function getAllStatus(orderCode: string) {
 }
 
 export async function getLastStatus(orderCode: string) {
-  let cu = {}
+  let result = {}
   await axios(`https://www.linkcorreios.com.br/?id=${orderCode}`)
     .then(
       async (response) =>  {
         const html = await response.data
         const $ = cheerio.load(html)
         const info : any =[]
-        $('.card-header ul li',html).each( function() {
+        await $('.card-header ul li',html).each( function() {
           info.push(removeColonBetweenNumbers(($(this).text())).split(":"))
         })
+        if(!info) {
+          throw new Error ("Código incorreto, ou ainda não temos informações sobre esse pacote") 
+        } 
         let hora = info[1].slice(2,4)
         info.push(hora)
         const obj = Object.fromEntries(info)
       
-        cu = obj
+        result = obj
       }
       
-      ).catch(err=> console.log(err))
+      ).catch(err=> console.log(err, "cu"))
 
-      return cu
+      return result
       
 }
