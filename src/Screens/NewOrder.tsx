@@ -64,7 +64,7 @@ const formattedString = removeQuotesAroundKeys(inputString);
     }
     setIsLoading(true)
     const userID = auth().currentUser?.uid
-    const {Data, Hora, Local ,Status} : any = await getLastStatus("LB568216445HKa")
+    const {Data, Hora, Local ,Status} : any = await getLastStatus(orderCode)
     const tagsFormated = removeQuotesAroundKeys(JSON.stringify(tags))
     console.log(tagsFormated)
     CreateOrderTwo(orderCode, orderTitle, Data, Hora, Status, tagsFormated)
