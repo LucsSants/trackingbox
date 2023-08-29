@@ -28,16 +28,17 @@ function RemoveBigSpace(str:string) {
 }
 
 export async function getAllStatus(orderCode: string) {
-
-  axios("https://www.linkcorreios.com.br/?id=LB568216445HK")
+  let result : any[] = [];
+  await axios("https://www.linkcorreios.com.br/?id=LB568216445HK")
     .then(
-      (response) => {
+      
+       async (response) => {
         const html = response.data
         const $ = cheerio.load(html)
         const info : any =[]
         const infos : any =[]
 
-        $('.singlepost .linha_status',html).each(function() {
+        await $('.singlepost .linha_status',html).each(function() {
           info.push(RemoveBigSpace($(this).text()))
           // info.push(removeColonBetweenNumbers(AddSpaceBetween(($(this).text()))).split(":"))
           // a = {
@@ -59,19 +60,21 @@ export async function getAllStatus(orderCode: string) {
         
             resultado.push(objeto);
           }
-        
-          return resultado;
+           return resultado;
         }
-
+        
         info.forEach(function(item:any) {
           infos.push(removeColonBetweenNumbers(item.toString()).split(":"))
         })
         const obj = arrayDeArraysParaObjetos(infos)
+        console.log(obj)
+        result = obj
+       
     }
     
     ).catch(err=> console.log(err))
 
-    
+    return result
 }
 
 export async function getLastStatus(orderCode: string) {

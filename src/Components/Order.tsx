@@ -3,6 +3,7 @@ import { HStack, IPressableProps, Pressable, ScrollView, Text, VStack, useTheme 
 import {CheckCircle, Key, Tag} from 'phosphor-react-native'
 import { OrderTag } from './OrderTag';
 import { formatDate, formatHour } from '../utils/formatData';
+import { useNavigation } from '@react-navigation/native';
 
 type TagData = {
   id: string;
@@ -29,14 +30,20 @@ type Props = IPressableProps & {
 }
 
 export function Order({data, ...rest} : Props) {
+  const navigation = useNavigation()
+
   const {colors} = useTheme()
+
+  function handleOpenDetails( orderCode: string, orderTitle: string) {
+    navigation.navigate('details', {orderCode, orderTitle})
+  }
   
   return (
-    <Pressable onPress={() => console.log(data)} mb={15} _pressed={{opacity: 0.7}}>
+    <Pressable onPress={() => handleOpenDetails (data.orderCode, data.orderTitle)} mb={15} _pressed={{opacity: 0.7}}>
         
     <HStack w="full" backgroundColor="white" rounded="2xl" py={3} px={6} flexDirection="row">
       <VStack alignItems="center" justifyContent="center" width="15%">
-        <VStack backgroundColor="gray.300" h="55" w="55" rounded="full" alignItems="center" justifyContent="center">
+        <VStack backgroundColor="gray.100" h="55" w="55" rounded="full" alignItems="center" justifyContent="center">
           <CheckCircle weight='fill' size={32} color={colors.green[200]}/>
         </VStack>
         <Text color="green.700" fontWeight="black" >{formatDate(data.orderLastStatus.statusDate) === "undefined/undefined" ? "??" : formatDate(data.orderLastStatus.statusDate)}</Text>

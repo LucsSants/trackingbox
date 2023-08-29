@@ -11,6 +11,7 @@ import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useQuery } from '@apollo/client'
 
 import { GET_ALL_ORDERS } from '../api/querries';
+import { getAllStatus, getLastStatus } from '../api/api';
 
 export function Home() {
   const isFocused = useIsFocused();
@@ -24,8 +25,8 @@ export function Home() {
     navigation.navigate('new')
   }
 
-  function handleLogout() {
-    refetch()
+  async function handleLogout() {
+     console.log(await getAllStatus("a"))
   }
 
   useEffect(() => {
@@ -34,7 +35,6 @@ export function Home() {
         refetch()
       }
     })();
-  
     
   },[isFocused])
 
@@ -58,7 +58,6 @@ export function Home() {
           />
       </VStack>
 
-
       { loading ? <Loading/> : 
       <FlatList
       data={data.firebaseUser.orders}
@@ -78,7 +77,6 @@ export function Home() {
       )}
       />
     }
-      
      
     <HStack h={20} alignItems="center" justifyContent="center" px="4" py="5">
 

@@ -75,9 +75,9 @@ const formattedString = removeQuotesAroundKeys(inputString);
   }
   
   return (
-    <VStack flex={1} flexDir={'column'} justifyContent={'space-between'}>
-      <VStack p={5}>
-      <Header title='Nova Encomenda' />
+    <VStack flex={1} flexDir={'column'} >
+      <Header title='Nova Encomenda' background={"white"}/>
+      <VStack px={5}>
       <Input title='Código de rastreamento' placeholder='#1234ACASDDF2C' onChangeText={setOrderCode}/>
       <Input title='Nome' placeholder='Roupa...' onChangeText={setOrderTitle}/>
       <Input title='Tags' placeholder='Loja...' buttonTitle='Adicionar' value={tagName} buttonColor={color} onChangeText={setTagName} buttonFunc={handleAddTags} maxLength={15}/>

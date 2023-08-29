@@ -5,6 +5,7 @@ export declare global {
       signup: undefined;
       home: undefined;
       new: undefined;
+      details: {orderCode: string, orderTitle: string}
     }
   }
 }
