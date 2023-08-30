@@ -20,6 +20,7 @@
       "useFrameworks": "static"
     },
     "android": {
+      "config.googleMaps.apiKey": "AIzaSyA-FYwrHQOvVFMdYXZMIQqHcXiS_Zni9tQ",
       "googleServicesFile": "./google-services.json",
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {

@@ -18,3 +18,15 @@ export function formatHour(hour : string) {
   
   return `${hoursArray[0]}${hoursArray[1]}:${hoursArray[2]}${hoursArray[3]}`
 }
+
+export function extractCity(input: string): string {
+  const parts = input.split('-');
+  if (parts.length > 1) {
+    const cityPart = parts[1].trim();
+    const cityParts = cityPart.split('/');
+    if (cityParts.length > 0) {
+      return cityParts[0].trim();
+    }
+  }
+  return "";
+}

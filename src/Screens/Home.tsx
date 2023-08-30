@@ -4,14 +4,12 @@ import MiniLogo from '../assets/mini-logo.svg'
 import { Order, OrderProps } from '../Components/Order';
 import { Button } from '../Components/Button';
 import { PlusCircle, UserCircle} from 'phosphor-react-native';
-import auth from '@react-native-firebase/auth'
-import firestore from '@react-native-firebase/firestore'
 import { Loading } from '../Components/Loading';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useQuery } from '@apollo/client'
 
 import { GET_ALL_ORDERS } from '../api/querries';
-import { getAllStatus, getLastStatus } from '../api/api';
+
 
 export function Home() {
   const isFocused = useIsFocused();
@@ -26,7 +24,7 @@ export function Home() {
   }
 
   async function handleLogout() {
-     console.log(await getAllStatus("a"))
+
   }
 
   useEffect(() => {
