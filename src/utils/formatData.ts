@@ -20,6 +20,7 @@ export function formatHour(hour : string) {
 }
 
 export function extractCity(input: string): string {
+  console.log(input)
   const parts = input.split('-');
   if (parts.length > 1) {
     const cityPart = parts[1].trim();
@@ -29,4 +30,8 @@ export function extractCity(input: string): string {
     }
   }
   return "";
+}
+
+export function isEmpty(obj: Object): boolean {
+  return Object.keys(obj).length === 0;
 }

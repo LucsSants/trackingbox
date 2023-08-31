@@ -24,7 +24,7 @@ export function Home() {
   }
 
   async function handleLogout() {
-
+    refetch()
   }
 
   useEffect(() => {

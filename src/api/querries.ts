@@ -8,7 +8,7 @@ export const GET_ALL_ORDERS = gql`
   query {
     firebaseUser(where: {uid:"${currentUser}"}) {
       id
-      orders {
+      orders (first:100){
         id
         orderCode
         orderTitle
@@ -62,9 +62,9 @@ export async function CreateOrder(orderCode: string, orderTitle: string, statusD
 export async function CreateOrderTwo(orderCode: string, orderTitle: string, statusDate:string, statusTime:string, statusTitle:string, tags:string) {
   await client.mutate({
     mutation: gql`
-    mutation MyMutation($orderTags: TagCreateManyInlineInput = {create:${tags}}) {
+    mutation MyMutation($orderTags: TagCreateManyInlineInput = {create:${tags}}) { 
       createOrder(
-        data: {cljp1sjnm114m01t91lh306fj: {connect: {uid: "${currentUser}"}}, orderCode: "LB568216445HKa", orderLastStatus: {create: {statusDate: "${statusDate}", statusPlace: "", statusTime: "${statusTime}", statuses: "${statusTitle}"}}, orderTags: $orderTags, orderTitle: "${orderTitle}"}
+        data: {cljp1sjnm114m01t91lh306fj: {connect: {uid: "${currentUser}"}}, orderCode: "${orderCode}", orderLastStatus: {create: {statusDate: "${statusDate}", statusPlace: "", statusTime: "${statusTime}", statuses: "${statusTitle}"}}, orderTags: $orderTags, orderTitle: "${orderTitle}"}
       ) {
         id
       }

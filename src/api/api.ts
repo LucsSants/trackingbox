@@ -29,7 +29,7 @@ function RemoveBigSpace(str:string) {
 
 export async function getAllStatus(orderCode: string) {
   let result : any[] = [];
-  await axios("https://www.linkcorreios.com.br/?id=LB568216445HK")
+  await axios(`https://www.linkcorreios.com.br/?id=${orderCode}`)
     .then(
       
        async (response) => {
@@ -45,6 +45,8 @@ export async function getAllStatus(orderCode: string) {
 
           // }
         })
+
+        console.log(info)
 
         function arrayDeArraysParaObjetos(arr: any[][]): object[]{
           const resultado: object[] = [];
@@ -67,7 +69,6 @@ export async function getAllStatus(orderCode: string) {
           infos.push(removeColonBetweenNumbers(item.toString()).split(":"))
         })
         const obj = arrayDeArraysParaObjetos(infos)
-        console.log(obj)
         result = obj
        
     }
@@ -86,19 +87,28 @@ export async function getLastStatus(orderCode: string) {
         const $ = cheerio.load(html)
         const info : any =[]
         await $('.card-header ul li',html).each( function() {
+          console.log("AAAAAAAAAAA")
+          if(!info) {
+             console.log("Código incorreto, ou ainda não temos informações sobre esse pacote")
+          }
           info.push(removeColonBetweenNumbers(($(this).text())).split(":"))
+          console.log(info)
         })
-        if(!info) {
-          throw new Error ("Código incorreto, ou ainda não temos informações sobre esse pacote") 
-        } 
-        let hora = info[1].slice(2,4)
-        info.push(hora)
-        const obj = Object.fromEntries(info)
-      
-        result = obj
+        console.log(info.length)
+        if (info.length > 0) {
+          let hora = info[1].slice(2,4)
+          info.push(hora)
+          const obj = Object.fromEntries(info)
+        
+          result = obj
+        }
+        
       }
       
-      ).catch(err=> console.log(err, "cu"))
+      ).catch(err=> {
+        console.log(err, "cuaralho")
+        return []
+      })
 
       return result
       
