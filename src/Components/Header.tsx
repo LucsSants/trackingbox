@@ -1,17 +1,27 @@
 import React from 'react';
-import { HStack, Heading, IconButton, StyledProps, Text, VStack, useTheme } from 'native-base';
-import { CaretLeft } from 'phosphor-react-native';
+import { HStack, Heading, IconButton, StyledProps, Text, VStack, useTheme, useColorMode } from 'native-base';
+import { CaretLeft, Trash } from 'phosphor-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
+import { deleteOrder } from '../api/querries';
 
 type Props = StyledProps & {
   title: string;
   subtitle?: string;
+  orderID?:string;
+  deleteFunc?: (props: any) => void;
 }
 
-export function Header({title,subtitle, ...rest}: Props) {
+export function Header({title,subtitle, orderID, deleteFunc,...rest}: Props) {
+  const {colorMode} = useColorMode()
   const {colors} = useTheme()
   const navigation = useNavigation()
+  
+
+  function deleteOrderA(id:string) {
+    navigation.goBack()
+  }
+
   return (
     <HStack
       w="full"
@@ -22,28 +32,43 @@ export function Header({title,subtitle, ...rest}: Props) {
       pt={10}
       px={5}
       
+      _dark={{bg:"black"}}
       {...rest}
     >
        <IconButton 
-        icon={<CaretLeft color={colors.gray[700]} size={24}/>}
+        icon={<CaretLeft color={ colorMode === "light" ? colors.gray[700] : colors.gray[100] } size={24}/>}
         onPress={navigation.goBack}
         zIndex={999}
       />
-      <VStack flexDirection='column' justifyContent='center' alignItems="center" ml={-5 }>
-        <Heading color="gray.700" textAlign="center" fontSize="lg" >
+      <VStack flexDirection='column' justifyContent='center' alignItems="center">
+        <Heading _light={{color:"gray.700"}} _dark={{color:"gray.100"}}  fontSize="lg" >
           {title}
         </Heading>
         {subtitle ? 
-         <Text color="gray.500" textAlign="center" fontSize="md">
+         <Text _light={{color:"gray.700"}} _dark={{color:"gray.100"}} textAlign="center" fontSize="md">
          {subtitle}
        </Text>
         :null}
          
-      </VStack>
+         </VStack>
+      
+        {
+          orderID ? 
+          <IconButton 
+          icon={<Trash color={ colorMode === "light" ? colors.gray[700] : colors.gray[100] } size={24}/>}
+          onPress={
+            deleteFunc
+           
+          }
+          zIndex={999}
+        />
+           : 
+         <VStack h="6" w="6">
 
-      <VStack>
+         </VStack>
+        }
+    
 
-      </VStack>
 
     </HStack>
   );

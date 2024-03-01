@@ -1,0 +1,33 @@
+{
+  "cli": {
+    "version": ">= 5.3.0"
+
+  },
+  "build": {
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "development": {
+
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview2": {
+      "distribution": "internal"
+    },
+    "production": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "HYGRAPH_URL":"https://sa-east-1.cdn.hygraph.com/content/cljp0e8yq10yx01t9bhmt7qwl/master",
+        "OPENW_API_KEY":"0414227dd8fa8619a8c1530808310554"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

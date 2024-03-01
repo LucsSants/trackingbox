@@ -17,6 +17,11 @@ export function Input({title ,buttonTitle,buttonColor, buttonFunc, ...rest}: Pro
     <VStack flexDir={buttonTitle ? "row":"column"} w="full" alignItems="center" justifyContent="space-between">
       <NativeBaseInput
         width={buttonTitle ? "70%" : "full"}
+        _dark={{bg:"dark.100", 
+           color:"gray.100",
+         _focus: {
+          bg: "dark.100"
+        }}}
         bg="white"
         h={14}
         size="md" 
@@ -25,6 +30,7 @@ export function Input({title ,buttonTitle,buttonColor, buttonFunc, ...rest}: Pro
         fontFamily="body"
         color="gray.700"
         placeholderTextColor="gray.300"
+
         _focus={{
           borderWidth:1,
           borderColor: "green.500",

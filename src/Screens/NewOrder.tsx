@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { VStack, Text, Center, Pressable, FlatList, useToast, ScrollView, HStack} from 'native-base';
+import { VStack, Text, Pressable, FlatList, useToast } from 'native-base';
 import { Header } from '../Components/Header';
 import { Input } from '../Components/Input';
 import { Keyboard } from 'react-native';
@@ -39,9 +39,6 @@ export function NewOrder() {
         return "Erro: A string JSON fornecida é inválida.";
     }
 }
-
-const inputString = '[{"tagName":"aaa","tagColor":{"hex":"#24A6D9"}}]';
-const formattedString = removeQuotesAroundKeys(inputString);
   
   function handleAddTags() {
     Keyboard.dismiss()
@@ -67,17 +64,17 @@ const formattedString = removeQuotesAroundKeys(inputString);
     const {Data, Hora, Local ,Status} : any = await getLastStatus(orderCode)
     const tagsFormated = removeQuotesAroundKeys(JSON.stringify(tags))
     console.log(tagsFormated)
-    CreateOrderTwo(orderCode, orderTitle, Data, Hora, Status, tagsFormated)
+    CreateOrderTwo(orderCode, orderTitle, Data, Hora, Status, tagsFormated, userID)
 
     setIsLoading(false)
-    navigation.navigate('home')
+    navigation.goBack()
     
   }
   
   return (
     <VStack flex={1} flexDir={'column'} >
-      <Header title='Nova Encomenda' background={"white"}/>
-      <VStack px={5}>
+      <Header title='Nova Encomenda'/>
+      <VStack px={5}  _dark={{bg: `black`}}>
       <Input title='Código de rastreamento' placeholder='#1234ACASDDF2C' onChangeText={setOrderCode}/>
       <Input title='Nome' placeholder='Roupa...' onChangeText={setOrderTitle}/>
       <Input title='Tags' placeholder='Loja...' buttonTitle='Adicionar' value={tagName} buttonColor={color} onChangeText={setTagName} buttonFunc={handleAddTags} maxLength={15}/>
@@ -92,6 +89,7 @@ const formattedString = removeQuotesAroundKeys(inputString);
 
       </VStack>
         <FlatList
+         _dark={{bg: `black`}}
         mt={5}
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -107,12 +105,9 @@ const formattedString = removeQuotesAroundKeys(inputString);
         }
       </VStack>
 
-      <HStack alignItems="center" justifyContent="center" p={5}>
+      <VStack alignItems="center" justifyContent="flex-end" p={5} flex={1} _dark={{bg: `black`}}>
       <Button title="Adicionar Encomenda" w="full" onPress={handleCreateOrder} isLoading={isLoading}/>
-      </HStack>
-
-      
-
+      </VStack>
     </VStack>
   );
 }

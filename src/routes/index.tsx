@@ -27,7 +27,7 @@ export function Routes() {
   }
 
   return(
-    <VStack flex={1} bg="gray.200">
+    <VStack flex={1} bg="gray.200" _dark={{bg:"black"}}>
       <NavigationContainer>
         {user ? <AppRoutes/> : <SignInRoutes/>}
       </NavigationContainer>

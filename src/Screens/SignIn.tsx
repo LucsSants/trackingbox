@@ -40,6 +40,7 @@ export function SignIn() {
     })
     .catch((error) => {
       console.log(error)
+      console.log(email)
       setIsLoading(false)
       
       if (error.code === "auth/invalid-email") {
@@ -51,6 +52,10 @@ export function SignIn() {
       if (error.code === "auth/invalid-email") {
         return toast.show({description: 'E-mail ou senha incorretos.'})
       }
+      if (error.code === "auth/user-not-found") {
+        return toast.show({description: 'Usuário não encontrado.'})
+      }
+
 
       return toast.show({description: 'Não foi possível acessar'})
     })
@@ -59,12 +64,12 @@ export function SignIn() {
  
 
   return (
-    <VStack flex={1}  bg="gray.200" px={8} pt={24} alignItems="center">
+    <VStack flex={1}  bg="gray.200" px={8} pt={24} alignItems="center" _dark={{bg:"black"}}>
       <VStack ml="5" mb="1">
       <Logo />
       </VStack>
         <Text fontSize={35} fontFamily="title" >Trackin'Box</Text>
-        <Heading color="gray.400" fontSize="lg" mt={1} mb={6}>
+        <Heading color="gray.400" fontSize="lg" mt={1} mb={6} _dark={{color:"gray.250"}}>
           Acesse sua conta
         </Heading>
       
@@ -77,7 +82,7 @@ export function SignIn() {
       <Input
         placeholder='Senha'
         mb={4}
-        InputLeftElement={<Icon as={<Key color={colors.gray[400]}/>} ml={4}/>}
+        InputLeftElement={<Icon as={<Key color={colors.gray[400]}/>} ml={4} />}
         type='password'
         onChangeText={setPassword}
       />
